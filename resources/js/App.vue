@@ -1,13 +1,26 @@
 <template>
-  <div class="p-4 text-white bg-black min-h-screen">
-    <h1 class="text-2xl font-bold mb-4">Poker Tools</h1>
-    <div class="tabs space-x-4">
-      <button @click="tab = 'range'" :class="btnClass('range')">Calculateur de Range</button>
-      <button @click="tab = 'equity'" :class="btnClass('equity')">Chances de Gagner</button>
-      <button @click="tab = 'odds'" :class="btnClass('odds')">Cote du Pot</button>
+  <div class="p-6 min-h-screen bg-gray-50">
+    <h1 class="text-3xl font-bold mb-6 text-center text-gray-800">Poker Tools</h1>
+
+    <!-- Onglets -->
+    <div class="flex justify-center gap-4 mb-8">
+      <button
+        v-for="name in tabs"
+        :key="name.value"
+        @click="tab = name.value"
+        :class="[
+          'px-4 py-2 rounded-lg transition-all duration-200',
+          tab === name.value
+            ? 'bg-blue-600 text-white shadow'
+            : 'bg-white text-blue-600 border border-blue-600 hover:bg-blue-50'
+        ]"
+      >
+        {{ name.label }}
+      </button>
     </div>
 
-    <div class="mt-6">
+    <!-- Contenu -->
+    <div class="bg-white rounded-xl shadow p-6 mx-auto">
       <RangeCalculator v-if="tab === 'range'" />
       <EquityCalculator v-if="tab === 'equity'" />
       <PotOddsCalculator v-if="tab === 'odds'" />
@@ -23,7 +36,9 @@ import PotOddsCalculator from './components/PotOddsCalculator.vue'
 
 const tab = ref('range')
 
-function btnClass(name: string) {
-  return tab.value === name ? 'font-bold underline' : ''
-}
+const tabs = [
+  { label: 'Calculateur de Range', value: 'range' },
+  { label: 'Chances de Gagner', value: 'equity' },
+  { label: 'Cote du Pot', value: 'odds' }
+]
 </script>

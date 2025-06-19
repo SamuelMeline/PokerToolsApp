@@ -1,0 +1,111 @@
+📊 Ranges Préflop Complètes (GTO Simplifié)
+🔹 15 Big Blinds (Push/Fold Dominant)
+À 15bb, on push beaucoup et on fold le reste.
+
+Position	Push (🔴 All-in)	Fold (⚪)
+UTG	77+, A9+, KQ, QJs, JTs	Le reste
+LJ	66+, A8+, KT+, QTs, J9s+	Le reste
+HJ	55+, A7+, K9+, Q9+, J8s+, T9s	Le reste
+CO	44+, A5+, K8+, Q8+, J7s+, T8s+, 98s	Le reste
+BTN	22+, A2+, K5+, Q7+, J6s+, T7s+, 97s+, 87s	Le reste
+SB	22+, A2+, K2+, Q4+, J5+, T6s+, 96s+, 86s+, 76s	Le reste
+BB (vs BTN/SB)	Call (🟢) : 22+, A2+, K2+, Q2+, J4+, T5+, 95s+, 85s+, 75s+	Fold (⚪) : Le reste
+🔹 30 Big Blinds (Push/Resize/Fold)
+À 30bb, on push les mains ultra fortes, resize (3bet) certaines mains et fold les trop faibles.
+
+Position	Push (🔴)	Resize (🟠 3bet)	Call (🟢)	Fold (⚪)
+UTG	JJ+, AK	TT, AQ, AJs, KQs	22-99, ATs, KJs	Le reste
+LJ	TT+, AK	99, AJ, KQ, A10s	22-88, A9s, KTs	Le reste
+HJ	99+, AQ+	88, AT, KJs, QJs	22-77, A8s, K9s	Le reste
+CO	88+, AJ+	77, A10, K10s, Q10s	22-66, A7s, K8s	Le reste
+BTN	77+, A9+	66, A8, K9, Q9	22-55, A2s-A6s	Le reste
+SB	66+, A7+	55, A6, K8, Q8	22-44, A2s-A5s	Le reste
+BB (vs BTN)	Resize (🟠) : 55+, A5+, K7+	Call (🟢) : 22-44, A2s-A4s	Fold (⚪) : Le reste
+🔹 50 Big Blinds (Resize/Call/Fold)
+À 50bb, on 3bet plus souvent et on call des ranges plus larges.
+
+Position	Resize (🟠 3bet)	Call (🟢)	Fold (⚪)
+UTG	TT+, AQ+, AJs, KQs	22-99, ATs, KJs	Le reste
+LJ	99+, AJ+, KQ, A10s	22-88, A9s, KTs	Le reste
+HJ	88+, AT+, KJs, QJs	22-77, A8s, K9s	Le reste
+CO	77+, A9+, K10s, Q10s	22-66, A7s, K8s	Le reste
+BTN	66+, A8+, K9+, Q9+	22-55, A2s-A7s	Le reste
+SB	55+, A7+, K8+, Q8+	22-44, A2s-A6s	Le reste
+BB (vs BTN)	Resize (🟠) : 44+, A5+, K7+	Call (🟢) : 22-33, A2s-A4s	Fold (⚪) : Le reste
+🔹 100 Big Blinds (Jeu Standard)
+À 100bb, on joue des ranges plus serrées et on flat call plus souvent.
+
+Position	Resize (🟠 3bet)	Call (🟢)	Fold (⚪)
+UTG	QQ+, AK, AQs	22-JJ, ATs+, KQs	Le reste
+LJ	JJ+, AQ+, AJs	22-TT, A10s, KJs	Le reste
+HJ	TT+, AJ+, KQs	22-99, A9s, KTs	Le reste
+CO	99+, A10+, KJs	22-88, A8s, K9s	Le reste
+BTN	88+, A9+, K10s	22-77, A7s, K8s	Le reste
+SB	77+, A8+, K9+	22-66, A2s-A7s	Le reste
+BB (vs BTN)	Resize (🟠) : 66+, A7+, K8+	Call (🟢) : 22-55, A2s-A6s	Fold (⚪) : Le reste
+
+🎯 1. Ranges de 3bet (Réponse à une ouverture)
+Quand un adversaire open-raise, voici les mains avec lesquelles tu peux 3bet (🟠) selon ta position :
+
+Position	3bet Value (🟠)	3bet Bluff (🟠)
+UTG vs LJ	QQ+, AK, AQs	A5s-A2s (blocage), KJs
+CO vs HJ	TT+, AQ+, KQs	76s, 65s (mains connectées)
+BTN vs CO	99+, AJ+, KQ	JTs, T9s, 54s (bonnes mains à equity)
+SB vs BTN	77+, A8+, K10+	Q9s, J8s (mains avec fold equity)
+BB vs SB	55+, A5+, K9+	32s, 42s (bluffs extrêmes en BB)
+➡ À savoir :
+
+En position (BTN/CO), tu peux 3bet plus large avec des bluffs.
+
+En SB/BB, utilise des mains qui bloquent les calls (Ax, Kx).
+
+🔥 2. Ranges de 4bet (Réponse à un 3bet)
+Quand tu es 3betté, voici les mains pour 4bet (🔴) ou call (🟢) :
+
+Scenario	4bet Push (🔴)	Call (🟢)	Fold (⚪)
+UTG vs CO 3bet	KK+, AKs	QQ, AK, AQs	JJ-, AQ-
+BTN vs BB 3bet	TT+, AQ+	99, AJ, KQ	88-, AT-
+SB vs BTN 3bet	99+, AJ+	88, AT, KQ	77-, A9-
+➡ À savoir :
+
+En short stack (20-30bb), 4bet = push all-in.
+
+En deep stack (100bb+), call plus souvent avec des paires moyennes (TT-QQ).
+
+🔄 3. Ranges de Cold Call (Flat derrière un open)
+Quand un joueur open et que tu call derrière (sans 3bet) :
+
+Position	Call (🟢)	Exemple de mains
+UTG+1 vs UTG	22-JJ, ATs, KQs	Évite AJo/KQo (dominé)
+CO vs LJ	55-TT, A9s, KJs	Bonnes suited connectors (T9s, 98s)
+BTN vs HJ	22+, A2s+, K9s+	Large pour profiter de la position
+➡ À savoir :
+
+Évite de cold-call avec des mains faibles (ex: KJo, QTo).
+
+Privilégie les suited hands et paires pour set-mining.
+
+🛡️ 4. Ranges de Défense de la BB (vs Open)
+En Big Blind, tu peux défendre large contre les opens :
+
+Position de l'attaquant	Call (🟢)	3bet (🟠)
+BTN open	22+, A2+, K5+, Q7+, J8+, T9s	55+, A8+, K10+, QJs
+SB open	22+, A2+, K3+, Q5+, J7+, T8s	44+, A5+, K9+, Q10+
+➡ À savoir :
+
+Vs BTN, défends ~50-60% de tes mains.
+
+Vs SB, défends ~40-50% (car SB a une range plus large).
+
+🚀 5. Ranges de Push/Fold en ICM (Tournois)
+En fin de tournoi, l’ICM influence tes ranges. Exemple en 10-15bb :
+
+Position	Push (🔴)	Fold (⚪)
+UTG (9 joueurs)	88+, AJ+, KQ	Le reste
+CO (6 joueurs)	55+, A7+, K10+, QJs	Le reste
+BTN (3 joueurs)	22+, A2+, K5+, Q8+, J9+	Le reste
+➡ À savoir :
+
+Plus la bubble est proche, plus tu dois serrer ta range.
+
+En prize pool élevé, évite les pushes marginaux (ex: A5o en UTG).

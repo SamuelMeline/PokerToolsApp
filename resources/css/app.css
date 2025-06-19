@@ -1,5 +1,7 @@
 @import 'tailwindcss';
 
+@tailwind utilities;
+
 @import 'tw-animate-css';
 
 @source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
@@ -165,3 +167,5 @@
         @apply bg-background text-foreground;
     }
 }
+
+

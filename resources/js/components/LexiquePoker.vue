@@ -2,15 +2,17 @@
   <div class="p-6 max-w-6xl mx-auto">
     <h1 class="text-3xl font-bold mb-6">Lexique Poker</h1>
 
-    <!-- Ajout -->
-    <div class="mb-8">
-      <h2 class="text-xl font-semibold mb-2">Ajouter un terme</h2>
-      <form @submit.prevent="ajouterTerme" class="space-y-2">
-        <input v-model="nouveauTerme.Catégorie" placeholder="Catégorie" class="input" required />
-        <input v-model="nouveauTerme.Terme" placeholder="Terme" class="input" required />
-        <textarea v-model="nouveauTerme.Définition" placeholder="Définition" class="input" required></textarea>
-        <button type="submit" class="btn">Ajouter</button>
-      </form>
+    <!-- Recherche + Tri -->
+    <div class="flex justify-between items-center mb-4">
+      <input v-model="recherche" placeholder="Rechercher un terme ou une catégorie..." class="input" />
+      <select v-model="cleTri" class="input ml-4 w-40">
+        <option value="Catégorie">Catégorie</option>
+        <option value="Terme">Terme</option>
+        <option value="Définition">Définition</option>
+      </select>
+      <button @click="triAscendant = !triAscendant" class="btn ml-2">
+        Trier {{ triAscendant ? '⬆️' : '⬇️' }}
+      </button>
     </div>
 
     <!-- Liste -->
@@ -26,14 +28,14 @@
           </tr>
         </thead>
         <tbody>
-          <tr v-for="terme in termes" :key="terme.id" class="border-t">
+          <tr v-for="terme in termesFiltresTries" :key="terme.id" class="border-t">
             <template v-if="termeEnEdition?.id === terme.id">
               <td class="p-2 border"><input v-model="termeEnEdition.Catégorie" class="input" /></td>
               <td class="p-2 border"><input v-model="termeEnEdition.Terme" class="input" /></td>
               <td class="p-2 border"><textarea v-model="termeEnEdition.Définition" class="input"></textarea></td>
               <td class="p-2 border text-center">
-                <button type="button" @click="validerEdition(termeEnEdition)" class="btn mr-2">✅</button>
-                <button type="button" @click="termeEnEdition = null" class="btn bg-gray-400 hover:bg-gray-500">❌</button>
+                <button @click="validerEdition(termeEnEdition)" class="btn mr-2">✅</button>
+                <button @click="termeEnEdition = null" class="btn bg-gray-400 hover:bg-gray-500">❌</button>
               </td>
             </template>
             <template v-else>
@@ -41,23 +43,32 @@
               <td class="p-2 border">{{ terme.Terme }}</td>
               <td class="p-2 border">{{ terme.Définition }}</td>
               <td class="p-2 border text-center">
-                <button type="button" @click="editerTerme(terme)" class="text-blue-600 hover:text-blue-800 mr-2" title="Modifier">
-                  ✏️
-                </button>
-                <button type="button" @click="supprimerTerme(terme.id)" class="text-red-600 hover:text-red-800" title="Supprimer">
-                  🗑️
-                </button>
+                <button @click="editerTerme(terme)" class="text-blue-600 hover:text-blue-800 mr-2"
+                  title="Modifier">✏️</button>
+                <button @click="supprimerTerme(terme.id)" class="text-red-600 hover:text-red-800"
+                  title="Supprimer">🗑️</button>
               </td>
             </template>
           </tr>
         </tbody>
       </table>
     </div>
+
+    <!-- Ajout -->
+    <div class="mt-8 add-therme">
+      <h2 class="text-xl font-semibold mb-2">Ajouter un terme</h2>
+      <form @submit.prevent="ajouterTerme" class="space-y-2">
+        <input v-model="nouveauTerme.Catégorie" placeholder="Catégorie" class="input" required />
+        <input v-model="nouveauTerme.Terme" placeholder="Terme" class="input" required />
+        <textarea v-model="nouveauTerme.Définition" placeholder="Définition" class="input" required></textarea>
+        <button type="submit" class="btn">Ajouter</button>
+      </form>
+    </div>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, onMounted } from 'vue'
+import { defineComponent, ref, onMounted, computed } from 'vue'
 
 export default defineComponent({
   name: 'LexiquePoker',
@@ -65,6 +76,9 @@ export default defineComponent({
     const termes = ref<any[]>([])
     const nouveauTerme = ref({ Catégorie: '', Terme: '', Définition: '' })
     const termeEnEdition = ref<any | null>(null)
+    const recherche = ref('')
+    const triAscendant = ref(true)
+    const cleTri = ref<'Catégorie' | 'Terme' | 'Définition'>('Catégorie')
 
     const chargerTermes = async () => {
       const res = await fetch('http://127.0.0.1:8000/api/lexique')
@@ -123,9 +137,24 @@ export default defineComponent({
       }
     }
 
+    const termesFiltresTries = computed(() => {
+      return termes.value
+        .filter(t =>
+          t.Terme.toLowerCase().includes(recherche.value.toLowerCase()) ||
+          t.Catégorie.toLowerCase().includes(recherche.value.toLowerCase()) ||
+          t.Définition.toLowerCase().includes(recherche.value.toLowerCase())
+        )
+        .sort((a, b) => {
+          const valA = a[cleTri.value].toLowerCase()
+          const valB = b[cleTri.value].toLowerCase()
+          if (valA < valB) return triAscendant.value ? -1 : 1
+          if (valA > valB) return triAscendant.value ? 1 : -1
+          return 0
+        })
+    })
+
     onMounted(() => {
       chargerTermes()
-      // Sécurité supplémentaire si jamais un bouton submit traîne ailleurs
       window.addEventListener('submit', e => e.preventDefault())
     })
 
@@ -137,6 +166,10 @@ export default defineComponent({
       editerTerme,
       validerEdition,
       termeEnEdition,
+      recherche,
+      termesFiltresTries,
+      triAscendant,
+      cleTri,
     }
   },
 })
@@ -144,10 +177,14 @@ export default defineComponent({
 
 <style scoped>
 .input {
-  width: 100%;
+  width: 45%;
   padding: 0.5rem;
   border: 1px solid #ccc;
   border-radius: 0.375rem;
+}
+
+.add-therme .input {
+  width: 100%;
 }
 
 .btn {

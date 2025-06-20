@@ -33,11 +33,10 @@ const hand = ref(['', ''])
 const board = ref(['', '', ''])
 const equity = ref<{ outs: number; percent: number } | null>(null)
 
-const usedCards = computed(() => [...hand.value, ...board.value].filter(Boolean))
+const usedCards = computed(() =>
+  [...hand.value, ...board.value].filter(card => card && card.length === 2)
+)
 
-// ------------------------------
-// OUTS CALCULATOR LOGIC
-// ------------------------------
 const ranks = '23456789TJQKA'
 const suits = 'hdsc'
 
@@ -65,30 +64,33 @@ function calculateEquity() {
     return
   }
 
-  const deck = generateDeck()
-  const currentCards = allCards.map(parseCard)
+  const _deck = generateDeck()
+  const parsed = allCards.map(parseCard)
 
-  const flushOuts = computeFlushOuts(currentCards, deck)
-  const straightOuts = computeStraightOuts(currentCards, deck)
+  const flushOuts = computeFlushOuts(parsed, _deck)
+  const straightOuts = computeStraightOuts(parsed, _deck)
 
-  // Fusionner les outs sans doublons
+
+  // Fusion des outs sans doublon
   const totalOuts = new Set([...flushOuts, ...straightOuts])
   const outs = totalOuts.size
 
-  const percent = +(outs * 4).toFixed(2) // approximation : règle du 4 au flop
+  // Règle du 4 si flop, sinon du 2 si turn (ici on suppose flop)
+  const percent = +(outs * 4).toFixed(2)
+
   equity.value = { outs, percent }
 }
 
 function computeFlushOuts(cards: { rank: string; suit: string }[], deck: string[]) {
-  const suitsCount: Record<string, string[]> = { h: [], d: [], s: [], c: [] }
+  const suitCount: Record<string, number> = { h: 0, d: 0, s: 0, c: 0 }
   for (const card of cards) {
-    suitsCount[card.suit].push(card.rank)
+    suitCount[card.suit]++
   }
 
-  const flushSuit = Object.entries(suitsCount).find(([, ranks]) => ranks.length >= 4)?.[0]
+  const flushSuit = Object.entries(suitCount).find(([, count]) => count >= 4)?.[0]
   if (!flushSuit) return new Set<string>()
 
-  return new Set(deck.filter(c => c[1] === flushSuit))
+  return new Set(deck.filter(card => card[1] === flushSuit))
 }
 
 function computeStraightOuts(cards: { rank: string; suit: string }[], deck: string[]) {
@@ -98,35 +100,42 @@ function computeStraightOuts(cards: { rank: string; suit: string }[], deck: stri
     'T': 10, 'J': 11, 'Q': 12, 'K': 13, 'A': 14
   }
 
-  const cardValues = [...new Set(cards.map(c => rankToValue[c.rank]))].sort((a, b) => a - b)
+  const values = [...new Set(cards.map(c => rankToValue[c.rank]))].sort((a, b) => a - b)
 
   const sequences = [
-    [2, 3, 4, 5], [3, 4, 5, 6], [4, 5, 6, 7], [5, 6, 7, 8],
-    [6, 7, 8, 9], [7, 8, 9, 10], [8, 9, 10, 11],
-    [9, 10, 11, 12], [10, 11, 12, 13], [11, 12, 13, 14],
-    [2, 3, 4, 5, 14] // low Ace straight (A2345)
+    [2, 3, 4, 5],
+    [3, 4, 5, 6],
+    [4, 5, 6, 7],
+    [5, 6, 7, 8],
+    [6, 7, 8, 9],
+    [7, 8, 9, 10],
+    [8, 9, 10, 11],
+    [9, 10, 11, 12],
+    [10, 11, 12, 13],
+    [11, 12, 13, 14],
+    [2, 3, 4, 5, 14] // A2345
   ]
 
-  const straightOuts = new Set<string>()
+  const outs = new Set<string>()
 
   for (const seq of sequences) {
-    const hits = seq.filter(v => cardValues.includes(v))
+    const hits = seq.filter(v => values.includes(v))
     if (hits.length === 4) {
-      const missing = seq.find(v => !cardValues.includes(v))
-      if (missing) {
-        const rankChar = Object.entries(rankToValue).find(([, v]) => v === missing)?.[0]
-        if (rankChar) {
-          for (const suit of suits) {
-            const candidate = `${rankChar}${suit}`
-            if (!usedCards.value.includes(candidate)) {
-              straightOuts.add(candidate)
-            }
-          }
+      const missing = seq.find(v => !values.includes(v))
+      if (!missing) continue
+
+      const rankChar = Object.entries(rankToValue).find(([, val]) => val === missing)?.[0]
+      if (!rankChar) continue
+
+      for (const suit of suits) {
+        const candidate = `${rankChar}${suit}`
+        if (!usedCards.value.includes(candidate)) {
+          outs.add(candidate)
         }
       }
     }
   }
 
-  return straightOuts
+  return outs
 }
 </script>

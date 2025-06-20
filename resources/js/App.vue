@@ -24,21 +24,30 @@
       <RangeCalculator v-if="tab === 'range'" />
       <EquityCalculator v-if="tab === 'equity'" />
       <PotOddsCalculator v-if="tab === 'odds'" />
+      <LexiquePoker v-if="tab === 'lexique'" />
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
 import RangeCalculator from './components/RangeCalculator.vue'
 import EquityCalculator from './components/EquityCalculator.vue'
 import PotOddsCalculator from './components/PotOddsCalculator.vue'
+import LexiquePoker from './components/LexiquePoker.vue'
+import { ref, watch } from 'vue'
 
-const tab = ref('range')
+
+const tab = ref(localStorage.getItem('activeTab') || 'range')
+
+watch(tab, (nouvelOnglet) => {
+  localStorage.setItem('activeTab', nouvelOnglet)
+})
+
 
 const tabs = [
   { label: 'Calculateur de Range', value: 'range' },
   { label: 'Chances de Gagner', value: 'equity' },
-  { label: 'Cote du Pot', value: 'odds' }
+  { label: 'Cote du Pot', value: 'odds' },
+  { label: 'Lexique Poker', value: 'lexique' }
 ]
 </script>

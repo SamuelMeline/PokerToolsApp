@@ -43,8 +43,8 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue'
 
-const stacks = [10, 20, 30, 40, 50, 60, 70, 80, 90, 100]
-const positions = ['UTG', 'LJ', 'HJ', 'CO', 'BTN', 'SB', 'BB']
+const stacks = [10, 20, 30, 40, 60, 100]
+const positions = ['UTG', 'LJ', 'HJ', 'CO', 'BTN', 'SB', 'DEF-BB-UTG', 'DEF-BB-SB']
 
 const selectedStack = ref(100)
 const selectedPosition = ref('LJ')

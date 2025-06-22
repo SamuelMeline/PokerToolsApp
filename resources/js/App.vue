@@ -22,16 +22,16 @@
     <!-- Contenu -->
     <div class="bg-white rounded-xl shadow p-6 mx-auto">
       <RangeCalculator v-if="tab === 'range'" />
-      <EquityCalculator v-if="tab === 'equity'" />
       <PotOddsCalculator v-if="tab === 'odds'" />
       <LexiquePoker v-if="tab === 'lexique'" />
+      <PokerOutsCalculator v-if="tab === 'equity'" />
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
 import RangeCalculator from './components/RangeCalculator.vue'
-import EquityCalculator from './components/EquityCalculator.vue'
+import PokerOutsCalculator from './components/PokerOutsCalculator.vue'
 import PotOddsCalculator from './components/PotOddsCalculator.vue'
 import LexiquePoker from './components/LexiquePoker.vue'
 import { ref, watch } from 'vue'
